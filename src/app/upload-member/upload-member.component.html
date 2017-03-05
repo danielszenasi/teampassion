@@ -1,0 +1,90 @@
+<div *ngIf="isAuth" class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="margin-20">
+        <h4>Új csapattag hozzáadása</h4>
+      </div>
+      <form [formGroup]="memberForm" novalidate (ngSubmit)="save(memberForm)">
+        <div class="form-group">
+          <label>Név</label>
+          <input type="text" class="form-control" formControlName="name">
+          <small *ngIf="!memberForm.controls.name.valid" class="text-danger">
+            A Név kitöltése kötelező.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Szerep</label>
+          <input type="text" class="form-control" formControlName="role">
+        </div>
+
+        <div class="form-group">
+          <label>Születési idő</label>
+          <input type="date" class="form-control" formControlName="birthDay">
+        </div>
+
+        <div class="form-group">
+          <label>Születési hely</label>
+          <input type="text" class="form-control" formControlName="birthPlace">
+          <small *ngIf="!memberForm.controls.birthPlace.valid" class="text-danger">
+            Az Születési hely kitöltése kötelező.
+          </small>
+        </div>
+
+        <div>
+          <label for="previewImg">Előnézeti kép</label>
+          <input type="file" #previewImg id="previewImg" accept="image/*" (change)="onPreviewImg($event)"/>
+        </div>
+
+        <div class="form-group">
+          <label>Passion-hőz csatlakozás ideje</label>
+          <input type="number" class="form-control" formControlName="joinPassion">
+        </div>
+
+        <div class="form-group">
+          <label>Korcsolyázás kezdete</label>
+          <input type="number" class="form-control" formControlName="past">
+          <small *ngIf="!memberForm.controls.past.valid" class="text-danger">
+            A Korcsolyázás kezdete hely kitöltése kötelező.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Korcsolyás előélet</label>
+          <input type="text" class="form-control" formControlName="startSkate">
+          <small *ngIf="!memberForm.controls.startSkate.valid" class="text-danger">
+            Az Korcsolyás előélet hely kitöltése kötelező.
+          </small>
+        </div>
+
+        <!--questions-->
+        <div formArrayName="questions">
+          <div *ngFor="let question of memberForm.controls.questions.controls; let i=index" class="panel panel-default">
+            <div class="panel-heading">
+              <span>Kérdés {{i + 1}}</span>
+              <span class="glyphicon glyphicon-remove pull-right"
+                    *ngIf="memberForm.controls.questions.controls.length > 1"
+                    (click)="removeQuestion(i)"></span>
+            </div>
+            <div class="panel-body" [formGroupName]="i">
+              <div class="form-group col-xs-6">
+                <textarea type="text" class="form-control" formControlName="question"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="margin-20">
+          <a (click)="addQuestion()" style="cursor: default">
+            Új kérdés
+          </a>
+        </div>
+        <div class="margin-20">
+          <button type="submit" class="btn btn-primary pull-right" [disabled]="!memberForm.valid">Submit</button>
+        </div>
+        <div class="clearfix"></div>
+      </form>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,40 @@
+<div class="news">
+  <section id="news">
+    <div class="container text-center wow fadeIn">
+      <h1>Híreink</h1>
+      <hr class="colored">
+    </div>
+  </section>
+</div>
+<section class="testimonials wow fadeIn">
+  <div #testimonialsCarousel class="testimonials-carousel">
+    <div class="item">
+      <div class="container-fluid">
+        <div class="row">
+          <app-news *ngFor="let news of newsList | async"
+                    [news]="news">
+          </app-news>
+        </div>
+      </div>
+    </div>
+    <div class="owl-controls">
+      <button class="owl-prev" [disabled]="!hasPrev" (click)="prev()">
+        <i class='fa fa-angle-left'></i>
+      </button>
+      <button class="owl-next" [disabled]="!hasNext" (click)="next()">
+        <i class='fa fa-angle-right'></i>
+      </button>
+    </div>
+  </div>
+</section>
+<aside class="cta-quote" style="background-image: url('assets/img/bg-aside3.jpg');">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1 wow fadeIn">
+        <!-- <hr class=" colored"> -->
+        <!-- <a class="btn btn-outline-light page-scroll" href="#contact">Let's Find It</a> -->
+      </div>
+    </div>
+  </div>
+</aside>
+

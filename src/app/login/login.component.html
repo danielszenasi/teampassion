@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="margin-20">
+        <h4>Bejelentkezés</h4>
+      </div>
+      <form [formGroup]="myForm" novalidate (ngSubmit)="login(myForm)">
+        <div class="form-group">
+        <label>Email</label>
+        <input type="text" formControlName="email">
+      </div>
+        <div class="form-group">
+          <label>Jelszó</label>
+          <input type="password" formControlName="password">
+        </div>
+        <div class="clearfix"></div>
+        <button type="submit" class="btn btn-primary pull-left" [disabled]="!myForm.valid">Bejelentkezés</button>
+      </form>
+      <button class="btn btn-primary pull-right" (click)="logout()">Kijelentkezés</button>
+    </div>
+  </div>
+</div>

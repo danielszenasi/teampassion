@@ -1,0 +1,16 @@
+<section id = "coaches">
+  <div class="container text-center wow fadeIn">
+    <h2>Edzőink</h2>
+    <hr class="colored">
+    <p>Itt olvashatsz edzőinkről</p>
+    <div class="row">
+      <div class="col-lg-12">
+        <div id="portfoliolist">
+          <app-member *ngFor="let member of coaches"
+                      [member]="member"></app-member>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

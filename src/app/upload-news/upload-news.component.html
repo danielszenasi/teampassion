@@ -1,0 +1,71 @@
+<div *ngIf="isAuth" class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="margin-20">
+        <h4>Új hír hozzáadása</h4>
+      </div>
+      <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm)">
+        <div class="form-group">
+          <label>Cím</label>
+          <input type="text" class="form-control" formControlName="title">
+          <small *ngIf="!myForm.controls.title.valid" class="text-danger">
+            A Cím kitöltése kötelező.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Alcím</label>
+          <input type="text" class="form-control" formControlName="subtitle">
+          <small *ngIf="!myForm.controls.subtitle.valid" class="text-danger">
+            Az Alcím kitöltése kötelező.
+          </small>
+        </div>
+
+        <!--paragraphs-->
+        <div formArrayName="paragraphs">
+          <div *ngFor="let paragraph of myForm.controls.paragraphs.controls; let i=index" class="panel panel-default">
+            <div class="panel-heading">
+              <span>Bekezdés {{i + 1}}</span>
+              <span class="glyphicon glyphicon-remove pull-right" *ngIf="myForm.controls.paragraphs.controls.length > 1" (click)="removeParagraph(i)"></span>
+            </div>
+            <div class="panel-body" [formGroupName]="i">
+              <div class="form-group col-xs-6">
+                <textarea type="text" class="form-control" formControlName="paragraph"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="margin-20">
+          <a (click)="addParagraph()" style="cursor: default">
+            Új bekezdés
+          </a>
+        </div>
+        <div class="form-group">
+          <label>Dátum</label>
+          <input type="date" class="form-control" formControlName="createdDate">
+        </div>
+        <div>
+          <label for="mainimg">Borító kép</label>
+          <input type="file" #mainImg id="mainImg" accept="image/*" (change)="onMainImg($event)"/>
+        </div>
+        <div>
+          <label for="previewImg">Előnézeti kép</label>
+          <input type="file" #previewImg id="previewImg" accept="image/*" (change)="onPreviewImg($event)"/>
+        </div>
+        <div>
+          <label for="images">Képek</label>
+          <input type="file" #images id="images" accept="image/*" (change)="onChange($event)"/>
+        </div>
+        <div *ngFor="let file of files">
+          {{file.name}}
+        </div>
+        <div class="margin-20">
+          <button type="submit" class="btn btn-primary pull-right" [disabled]="!myForm.valid">Submit</button>
+        </div>
+        <div class="clearfix"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
