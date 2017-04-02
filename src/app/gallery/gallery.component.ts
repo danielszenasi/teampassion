@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {NavbarService} from "../services/navbar.service";
 
 @Component({
   selector: 'app-gallery',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GalleryComponent implements OnInit {
 
-  constructor() { }
+
+  constructor(protected navbarService: NavbarService) {
+  }
 
   ngOnInit() {
+  }
+
+  yourNotificationFunction(data) {
+    this.navbarService.toggleNavBar(data);
   }
 
 }

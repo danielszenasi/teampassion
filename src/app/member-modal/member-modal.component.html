@@ -1,15 +1,14 @@
 <modal class="portfolio-modal modal fade" #modal tabindex="-1" role="dialog" aria-hidden="true" style="background-image: url('assets/img/bg-team-modal.jpg')">
-  <div class="modal-content">
     <div class="close-modal" data-dismiss="modal">
       <div class="lr">
         <div class="rl">
         </div>
       </div>
     </div>
-    <modal-body *ngIf="member" class="modal-body">
+    <modal-body *ngIf="member">
       <div class="container">
         <div class="row">
-          <div class="col-lg-8 col-lg-offset-2">
+          <div class="col-lg-8">
             <h2>{{member.name}}</h2>
             <hr class="colored">
             <img src="{{profileImageUrl}}" class="img-responsive img-circle portfolio-image" alt="">
@@ -33,21 +32,16 @@
               <h4 align="right" class="col-xs-6">Passion-höz csatlakozás éve</h4>
               <div align="left" class="col-xs-6">{{member.joinPassion}}</div>
             </div>
-            <hr class="colored">
-            <h4 *ngIf="member.questions">Miért szinkronkorcsolya?</h4>
-            <p>{{member.questions[0].question}}</p>
-            <hr class="colored">
-            <h4 *ngIf="member.questions.length > 1 ">Legjobb korcsolyás élmény</h4>
-            <p *ngIf="member.questions.length > 1">{{member.questions[1].question}}</p>
-            <hr class="colored">
-            <h4 *ngIf="member.questions.length > 2">Hobbi</h4>
-            <p *ngIf="member.questions.length > 2">{{member.questions[2].question}}</p>
+            <div *ngFor="let question of member.questions">
+              <hr class="colored">
+              <h4>{{question.question}}</h4>
+              <p>{{question.answer}}</p>
+            </div>
           </div>
-          <div class="col-lg-8 col-lg-offset-2">
+          <div class="col-lg-8">
             <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Vissza</button>
           </div>
         </div>
       </div>
     </modal-body>
-  </div>
 </modal>

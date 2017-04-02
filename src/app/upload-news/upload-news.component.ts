@@ -1,10 +1,10 @@
 import {Component, OnInit, Inject, ViewChild, ElementRef} from '@angular/core';
-import {News} from "../models/news.model";
-import {FormArray, Validators, FormBuilder, FormGroup} from "@angular/forms";
-import {NewsService} from "../services/news.service";
-import {FirebaseApp, AngularFire} from "angularfire2";
-import * as _ from "lodash";
-import {Subject} from "rxjs";
+import {News} from '../models/news.model';
+import {FormArray, Validators, FormBuilder, FormGroup} from '@angular/forms';
+import {NewsService} from '../services/news.service';
+import {FirebaseApp, AngularFire} from 'angularfire2';
+import * as _ from 'lodash';
+import {Subject} from 'rxjs/Subject';
 
 @Component({
   selector: 'app-upload-news',
@@ -20,7 +20,7 @@ export class UploadNewsComponent implements OnInit {
   private mainImg: File;
   private firebaseApp: any;
   private sub: Subject<any> = new Subject();
-  private isAuth: boolean = false;
+  private isAuth = false;
 
   @ViewChild('images') imageEl: ElementRef;
   @ViewChild('previewImg') previewImgEl: ElementRef;
@@ -36,15 +36,14 @@ export class UploadNewsComponent implements OnInit {
   ngOnInit() {
     this.sub.subscribe((form) => {
       this.upload(form);
-    })
+    });
     this.af.auth.subscribe(auth => {
-      console.log(auth);
       if (auth) {
-        this.isAuth = true
+        this.isAuth = true;
       }
 
     });
-    var local = new Date();
+    const local = new Date();
     local.setMinutes(local.getMinutes() - local.getTimezoneOffset());
 
     this.myForm = this._fb.group({
@@ -75,44 +74,45 @@ export class UploadNewsComponent implements OnInit {
 
   save(form: FormGroup) {
     if (this.previewImg && this.mainImg) {
-      let img = new Image();
-      var sub = this.sub;
+      const img = new Image();
+      const sub = this.sub;
       img.onload = function () {
-        if (this.width == 200 && this.height == 200) {
+        const image = this as HTMLImageElement;
+        if (image.width === 200 && image.height === 200) {
           sub.next(form);
         } else {
-          alert("Előnézeti kép 200px*200px nek kell lennie");
+          alert('Előnézeti kép 200px*200px nek kell lennie');
         }
       };
       img.src = window.URL.createObjectURL(this.previewImg);
     } else {
-      alert("Előnézeti és borító kép megadása kötelező");
+      alert('Előnézeti és borító kép megadása kötelező');
     }
 
 
   }
 
   upload(form) {
-    let model = form.value;
-    let p = model.paragraphs.map(data => data.paragraph);
-    let key = this.removeSpecialChars(model.title);
-    let news = new News(key, model.title, model.subtitle, p, model.createdDate, this.previewImg.name, this.mainImg.name);
-    var storageRef = this.firebaseApp.storage().ref();
-    var promises: Array<firebase.storage.UploadTask> = [];
-    let previewImg = storageRef.child(`news/${key}/${this.previewImg.name}`);
-    let mainImg = storageRef.child(`news/${key}/${this.mainImg.name}`);
+    const model = form.value;
+    const p = model.paragraphs.map(data => data.paragraph);
+    const key = this.removeSpecialChars(model.title);
+    const news = new News(key, model.title, model.subtitle, p, model.createdDate, this.previewImg.name, this.mainImg.name);
+    const storageRef = this.firebaseApp.storage().ref();
+    const promises: Array<firebase.storage.UploadTask> = [];
+    const previewImg = storageRef.child(`news/${key}/${this.previewImg.name}`);
+    const mainImg = storageRef.child(`news/${key}/${this.mainImg.name}`);
     promises.push(mainImg.put(this.mainImg));
     promises.push(previewImg.put(this.previewImg));
     this.files.forEach((file: File) => {
-      let image = storageRef.child(`news/${key}/${file.name}`);
+      const image = storageRef.child(`news/${key}/${file.name}`);
       promises.push(image.put(file));
     });
     Promise.all(promises).then(values => {
       news.images = this.files.map((file: File) => file.name);
-      const cleanObject = _.omitBy(news, _.isNil);
-      let date = new Date(news.createdDate);
-      let num = date.getFullYear() + date.getDay() * 30 + date.getDay();
-      this.newsService.createNews(cleanObject).setPriority(num, (data) => console.log(data));
+      const cleanObject: News = <News> _.omitBy(news, _.isNil);
+      const date = new Date(news.createdDate);
+      const num = date.getFullYear() + date.getDay() * 30 + date.getDay();
+      this.newsService.createNews(cleanObject);
       this.reset();
     });
   }
@@ -140,9 +140,9 @@ export class UploadNewsComponent implements OnInit {
     this.files = [];
     this.previewImg = null;
     this.mainImg = null;
-    this.imageEl.nativeElement.value = "";
-    this.previewImgEl.nativeElement.value = "";
-    this.mainImgEl.nativeElement.value = "";
+    this.imageEl.nativeElement.value = '';
+    this.previewImgEl.nativeElement.value = '';
+    this.mainImgEl.nativeElement.value = '';
   }
 
 }

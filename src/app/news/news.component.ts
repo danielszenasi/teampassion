@@ -10,9 +10,9 @@ import {Router} from "@angular/router";
 })
 export class NewsComponent implements OnInit {
 
-  @Input() news:any;
-  private imgSrc:string;
-  private firebaseApp:any;
+  @Input() news: any;
+  private imgSrc: string;
+  private firebaseApp: any;
 
   constructor(@Inject(FirebaseApp) firebaseApp: firebase.app.App,
               private router: Router) {
@@ -20,13 +20,11 @@ export class NewsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.news);
     const storageRef = this.firebaseApp.storage().ref().child(`news/${this.news.key}/${this.news.previewImage}`);
     storageRef.getDownloadURL().then(url => this.imgSrc = url);
   }
 
-  navigate(){
-    console.log(this.news.$key);
+  navigate() {
     this.router.navigate(['/news', this.news.$key]);
   }
 

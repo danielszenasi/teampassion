@@ -1,9 +1,9 @@
 import {Component, OnInit, Inject, ViewChild, ElementRef} from '@angular/core';
-import {FormGroup, FormBuilder, FormArray, Validators} from "@angular/forms";
-import {TeamService} from "../services/team.service";
-import {FirebaseApp, AngularFire} from "angularfire2";
-import {Member} from "../models/member.model";
-import * as _ from "lodash";
+import {FormGroup, FormBuilder, FormArray, Validators} from '@angular/forms';
+import {TeamService} from '../services/team.service';
+import {FirebaseApp, AngularFire} from 'angularfire2';
+import {Member} from '../models/member.model';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-upload-member',
@@ -16,7 +16,7 @@ export class UploadMemberComponent implements OnInit {
   public memberForm: FormGroup;
   private previewImg: File;
   private firebaseApp: any;
-  private isAuth: boolean = false;
+  private isAuth = false;
 
   @ViewChild('previewImg') previewImgEl: ElementRef;
 
@@ -31,7 +31,7 @@ export class UploadMemberComponent implements OnInit {
   ngOnInit() {
     this.af.auth.subscribe(auth => {
       if (auth) {
-        this.isAuth = true
+        this.isAuth = true;
       }
 
     });
@@ -52,6 +52,7 @@ export class UploadMemberComponent implements OnInit {
   initQuestion() {
     return this._fb.group({
       question: ['', Validators.required],
+      answer: ['', Validators.required]
     });
   }
 
@@ -69,13 +70,13 @@ export class UploadMemberComponent implements OnInit {
     if (this.previewImg) {
       this.upload(form);
     } else {
-      alert("Előnézeti és borító kép megadása kötelező");
+      alert('Előnézeti és borító kép megadása kötelező');
     }
   }
 
   upload(form) {
-    let model = form.value;
-    let member = new Member(model.name,
+    const model = form.value;
+    const member = new Member(model.name,
       model.birthDay,
       model.birthPlace,
       this.previewImg.name,
@@ -84,13 +85,11 @@ export class UploadMemberComponent implements OnInit {
       model.past,
       model.questions,
       model.role);
-    console.log(member);
-    console.log(this.previewImg.name);
-    var storageRef = this.firebaseApp.storage().ref();
-    let previewImg = storageRef.child(`team/${this.previewImg.name}`);
+    const storageRef = this.firebaseApp.storage().ref();
+    const previewImg = storageRef.child(`team/${this.previewImg.name}`);
     previewImg.put(this.previewImg).then(values => {
-      const cleanObject = _.omitBy(member, _.isNil);
-      let date = new Date(member.birthDay);
+      const cleanObject: Member = <Member> _.omitBy(member, _.isNil);
+      const date = new Date(member.birthDay);
       this.teamService.createMember(cleanObject);
       this.reset();
     });
@@ -103,7 +102,7 @@ export class UploadMemberComponent implements OnInit {
   reset() {
     this.memberForm.reset();
     this.previewImg = null;
-    this.previewImgEl.nativeElement.value = "";
+    this.previewImgEl.nativeElement.value = '';
   }
 
 }

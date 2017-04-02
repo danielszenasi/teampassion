@@ -2,10 +2,10 @@
 <app-newscontainer></app-newscontainer>
 <app-about></app-about>
 <app-team (team-clicked)="openTeamModal($event)"></app-team>
-<app-coaches></app-coaches>
+<app-coaches (coach-clicked)="openCoachModal($event)"></app-coaches>
 <app-results></app-results>
 <app-gallery></app-gallery>
 <app-videos></app-videos>
 <app-footer></app-footer>
 <app-member-modal #memberModal></app-member-modal>
-<app-news-modal></app-news-modal>
+<app-coach-modal #coachModal></app-coach-modal>

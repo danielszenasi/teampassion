@@ -15,7 +15,7 @@ export class TeamComponent implements OnInit {
 
   private team: FirebaseListObservable<any[]>;
 
-  constructor(private teamService:TeamService) {
+  constructor(private teamService: TeamService) {
   }
 
 

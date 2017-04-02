@@ -1,5 +1,6 @@
 import {Component, OnInit, HostListener, Inject} from '@angular/core';
 import {DOCUMENT} from '@angular/platform-browser';
+import {NavbarService} from "../services/navbar.service";
 
 
 @Component({
@@ -8,17 +9,26 @@ import {DOCUMENT} from '@angular/platform-browser';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit {
-  private navIsFixed: boolean = true;
+  private navIsFixed = true;
+  public showNav = true;
+  public hide = true;
 
-  constructor(@Inject(DOCUMENT) private document: Document) {
+  constructor(@Inject(DOCUMENT) private document: Document,
+              protected navbarService: NavbarService) {
   }
 
   ngOnInit() {
+    this.navbarService.toggleNav.subscribe((isClose: boolean) => {
+      this.showNav = !isClose;
+    });
+    this.navbarService.hideNav.subscribe((hide: boolean) => {
+      this.hide = !hide;
+    });
   }
 
   @HostListener('window:scroll', [])
   private onScroll() {
-    let number = this.document.body.scrollTop;
+    const number = this.document.body.scrollTop;
     if (number >= 200) {
       this.navIsFixed = false;
     }
@@ -27,5 +37,9 @@ export class NavigationComponent implements OnInit {
     }
 
   };
+
+  setNavbarFixed(isFixes: boolean) {
+    this.navIsFixed = isFixes;
+  }
 
 }

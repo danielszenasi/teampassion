@@ -1,4 +1,4 @@
-<section id = "coaches">
+<section id="coaches">
   <div class="container text-center wow fadeIn">
     <h2>Edzőink</h2>
     <hr class="colored">
@@ -6,8 +6,9 @@
     <div class="row">
       <div class="col-lg-12">
         <div id="portfoliolist">
-          <app-member *ngFor="let member of coaches"
-                      [member]="member"></app-member>
+          <app-member *ngFor="let member of coaches | async"
+                      [member]="member"
+                      (member-clicked)="memberClicked($event)"></app-member>
         </div>
       </div>
     </div>

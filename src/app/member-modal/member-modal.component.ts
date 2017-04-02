@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, SimpleChanges, OnChanges} from '@angular/core';
-import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
+import {ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal';
 import {Member} from "../models/member.model";
 
 @Component({
@@ -10,13 +10,14 @@ import {Member} from "../models/member.model";
 export class MemberModalComponent implements OnChanges {
 
   @ViewChild('modal') modal: ModalComponent;
-  private member:Member;
+  private member: Member;
 
-  constructor() { }
+  constructor() {
+  }
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes['modal'].currentValue){
+    if (changes['modal'].currentValue) {
       this.member.birthDay = new Date(this.member.birthDay)
     }
   }

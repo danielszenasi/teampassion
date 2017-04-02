@@ -16,40 +16,64 @@ export class NewsService {
     return this.news$;
   }
 
-  getThree(end:number) {
+  getLast(): Observable<News[]> {
+    return this.getWithQuery({
+      orderByChild: 'createdDate',
+      limitToLast: 3
+    });
+  }
+
+  getStartAt(startAt: string): Observable<News[]> {
+    return this.getWithQuery({
+      orderByChild: 'createdDate',
+      limitToLast: 3,
+      startAt: startAt
+    });
+  }
+
+  getEndAt(endAt: string): Observable<News[]> {
+    return this.getWithQuery({
+      orderByChild: 'createdDate',
+      limitToLast: 3,
+      endAt: endAt
+    });
+  }
+
+  getWithQuery(query: any): Observable<News[]> {
     return this.af.database.list('/news', {
-      query: {
-        orderByPriority: true,
-        limitToLast: 3,
-        endAt: end
+      query: query
+    }).map(data => {
+      if (data.length === 3) {
+        const temp = data[0];
+        data[0] = data[2];
+        data[2] = temp;
+        return data;
       }
-    }).map(data=> {
-     if(data.length === 3){
-       let temp = data[0];
-       data[0] = data[2];
-       data[2] = temp;
-       return data;
-     }
-      if(data.length === 2){
-        let temp = data[0];
+      if (data.length === 2) {
+        const temp = data[0];
         data[0] = data[1];
         data[1] = temp;
         return data;
       }
       return data;
 
+    }).map((news: News[]) => {
+      news.forEach((el: News) => {
+        el.createdDate = new Date(el.createdDate);
+      });
+      return news;
     });
   }
 
-  getSize():Observable<number>{
-    let items = this.af.database.list('/news', { preserveSnapshot: true });
-    return items.map(snapshots => {
-          return snapshots.length;
-      });
-  }
+  // getSize():Observable<number>{
+  //   let items = this.af.database.list('/news', { preserveSnapshot: true });
+  //   return items.map(snapshots => {
+  //         return snapshots.length;
+  //     });
+  // }
 
   getNewsById(id: string) {
-    return this.af.database.object('/news/'+id);
+    return this.af.database.object('/news/' + id);
   }
 
   createNews(news: News): firebase.database.ThenableReference {

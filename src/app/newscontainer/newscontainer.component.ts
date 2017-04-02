@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FirebaseListObservable} from "angularfire2";
 import {NewsService} from "../services/news.service";
 import {Observable} from "rxjs";
+import {News} from "../models/news.model";
 
 @Component({
   selector: 'app-newscontainer',
@@ -11,44 +12,37 @@ import {Observable} from "rxjs";
 })
 export class NewscontainerComponent implements OnInit {
 
-  private newsList: Observable<any[]>;
-  private numOfElements: number = 0;
-  private end: number;
-  private hasNext: boolean = false;
-  private hasPrev: boolean = false;
+  private newsList: Observable<News[]>;
+  protected end: string;
+  protected start: string;
+
 
   constructor(private newsService: NewsService) {
   }
 
 
   ngOnInit() {
-
-    this.newsService.getSize().subscribe(size => {
-      this.numOfElements = size;
-      this.end = this.numOfElements;
-      this.hasNext = this.end >= 3;
-      this.hasPrev = this.numOfElements > this.end;
+    this.newsList = this.newsService.getLast();
+    this.newsList.subscribe((newsList: News[]) => {
+      this.start = newsList[0].createdDate.toJSON().slice(0, 10);
+      this.end = newsList[newsList.length - 1].createdDate.toJSON().slice(0, 10);
     });
-    this.newsList = this.newsService.getThree(this.end);
-
   }
 
   next() {
-    if (this.end >= 3) {
-      this.end = this.end - 3;
-      this.hasNext = this.end >= 3;
-      this.hasPrev = this.numOfElements > this.end;
-      this.newsList = this.newsService.getThree(this.end);
-    }
+    this.newsList = this.newsService.getEndAt(this.end);
+    this.newsList.subscribe((newsList: News[]) => {
+      this.start = newsList[0].createdDate.toJSON().slice(0, 10);
+      this.end = newsList[newsList.length - 1].createdDate.toJSON().slice(0, 10);
+    });
   }
 
   prev() {
-    if (this.numOfElements > this.end) {
-      this.end = this.end + 3;
-      this.hasNext = this.end >= 3;
-      this.hasPrev = this.numOfElements > this.end;
-      this.newsList = this.newsService.getThree(this.end);
-    }
+    this.newsList = this.newsService.getStartAt(this.start);
+    this.newsList.subscribe((newsList: News[]) => {
+      this.start = newsList[0].createdDate.toJSON().slice(0, 10);
+      this.end = newsList[newsList.length - 1].createdDate.toJSON().slice(0, 10);
+    });
   }
 
 

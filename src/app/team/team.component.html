@@ -8,7 +8,7 @@
         <div id="portfoliolist">
           <app-member *ngFor="let member of team | async"
                       [member]="member"
-          (member-clicked)="memberClicked($event)"></app-member>
+                      (member-clicked)="memberClicked($event)"></app-member>
         </div>
       </div>
     </div>

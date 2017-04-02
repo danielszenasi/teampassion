@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AngularFire, AuthMethods, AuthProviders} from "angularfire2";
 import {Validators, FormBuilder, FormGroup} from "@angular/forms";
 
@@ -11,11 +11,11 @@ export class LoginComponent implements OnInit {
 
   public myForm: FormGroup;
 
-  constructor(public af: AngularFire,private _fb: FormBuilder) {}
+  constructor(public af: AngularFire, private _fb: FormBuilder) {
+  }
 
   login(form: FormGroup) {
-    console.log(form.value);
-    if(form.value.email && form.value.password){
+    if (form.value.email && form.value.password) {
       this.af.auth.login({
           email: form.value.email,
           password: form.value.password,
@@ -23,9 +23,7 @@ export class LoginComponent implements OnInit {
         {
           provider: AuthProviders.Password,
           method: AuthMethods.Password,
-        }).then(data => {
-          console.log(data);
-      });
+        }).then(data => {});
     }
 
   }
@@ -33,6 +31,7 @@ export class LoginComponent implements OnInit {
   logout() {
     this.af.auth.logout();
   }
+
   ngOnInit() {
 
     this.myForm = this._fb.group({

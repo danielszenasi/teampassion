@@ -1,3 +1,4 @@
+import {Question} from './question.model';
 export class Member {
   constructor(
     public name: string,
@@ -7,7 +8,7 @@ export class Member {
     public joinPassion: number,
     public past: string,
     public startSkate: number,
-    public questions: Array<any>,
+    public questions: Array<Question>,
     public role?:string
   ) {  }
 }
